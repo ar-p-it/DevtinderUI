@@ -4,7 +4,6 @@ import NavBar from "./Navbar";
 const Body = () => {
   return (
     <div>
-      hii
       <NavBar />
       <Outlet />
     </div>

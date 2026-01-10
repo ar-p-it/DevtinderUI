@@ -9,8 +9,37 @@ const Login = () => {
   const [password, setpassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // ✅ NEW: state to show error message to user
+  const [errorMsg, setErrorMsg] = useState("");
+
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await axios.post(
+  //       BASE_URL + "/login",
+  //       {
+  //         emailId,
+  //         password,
+  //       },
+  //       {
+  //         withCredentials: true,
+  //       }
+  //     );
+  //     // console.log(response.data);
+  //     dispatch(addUser(response.data));
+  //     return navigate("/");
+  //   } catch (error) {
+  //     console.log("Error : " + error);
+  //   }
+  // };
+
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    // ✅ clear previous error
+    setErrorMsg("");
+
     try {
       const response = await axios.post(
         BASE_URL + "/login",
@@ -22,11 +51,24 @@ const Login = () => {
           withCredentials: true,
         }
       );
-      // console.log(response.data);
-      dispatch(addUser(response.data));
-      return navigate("/");
+
+      // ❌ OLD
+      // dispatch(addUser(response.data));
+
+      // ✅ NEW (backend sends structured data)
+      dispatch(addUser(response.data.user));
+
+      navigate("/");
     } catch (error) {
-      console.log("Error : " + error);
+      // ❌ OLD
+      // console.log("Error : " + error);
+
+      // ✅ NEW: read backend error message safely
+      const message =
+        error.response?.data?.message ||
+        "Something went wrong. Please try again.";
+
+      setErrorMsg(message);
     }
   };
 
@@ -95,6 +137,13 @@ const Login = () => {
               </a>
             </div>
             {/* Login Button */}
+            {/* ✅ Error Message (NEW) */}
+            {errorMsg && (
+              <div className="bg-red-100 border border-red-300 text-red-700 px-4 py-2 rounded-lg text-sm">
+                {errorMsg}
+              </div>
+            )}
+
             <button
               type="submit"
               className="w-full py-3 px-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200"

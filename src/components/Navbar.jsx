@@ -192,10 +192,10 @@ const NavBar = () => {
             </li>
             <li>
               <Link
-                to="/settings"
+                to="/connections"
                 className="rounded-lg hover:bg-purple-100 font-medium"
               >
-                Settings
+                Connections
               </Link>
             </li>
             <li>

@@ -22,13 +22,16 @@ const EditProfile = ({ user }) => {
   const saveProfile = async () => {
     //clearing the errors
     setError("");
+    // ensure previous success toast doesn't show during a new attempt
+    setShowToast(false);
     try {
       const res = await axios.patch(
         BASE_URL + "/profile/edit",
         {
           firstName,
           lastName,
-          photoURL,
+          // Send correct key expected by backend
+          photoUrl: photoURL,
           age,
           gender,
           about,
@@ -38,13 +41,22 @@ const EditProfile = ({ user }) => {
           withCredentials: true,
         }
       );
-      dispatch(addUser(res.data.data));
+      // Be resilient to different response shapes
+      dispatch(addUser(res.data?.user || res.data?.data || res.data));
+      // clear any error and show success toast
+      setError("");
       setShowToast(true);
       setTimeout(() => {
         setShowToast(false);
       }, 3000);
     } catch (error) {
-      setError(error.response.data);
+      // hide success toast and show error message from backend if available
+      setShowToast(false);
+      const message =
+        error.response?.data?.message ||
+        error.response?.data ||
+        "Failed to save profile. Please try again.";
+      setError(message);
     }
   };
 
@@ -301,7 +313,7 @@ const EditProfile = ({ user }) => {
         </div>
       </div>
 
-      {showToast && (
+      {showToast && !error && (
         <div className="toast toast-top toast-center">
           <div className="alert alert-success">
             <span>Profile saved successfully</span>

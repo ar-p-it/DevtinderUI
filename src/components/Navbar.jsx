@@ -189,6 +189,14 @@ const NavBar = () => {
               >
                 Profile
               </Link>
+            </li>{" "}
+            <li>
+              <Link
+                to="/requests"
+                className="rounded-lg hover:bg-purple-100 font-medium"
+              >
+                Requests
+              </Link>
             </li>
             <li>
               <Link

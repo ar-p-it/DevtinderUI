@@ -1,0 +1,28 @@
+// import { createSlice } from "@reduxjs/toolkit";
+// const requestSlice = createSlice({
+//   name: "requests",
+//   initialState: [],
+//   reducers: {
+//     addRequests: (state, action) => action.payload,
+//   },
+// });
+// export const { addRequests } = requestSlice.actions;
+// export default requestSlice.reducer;
+
+import { createSlice } from "@reduxjs/toolkit";
+
+const requestSlice = createSlice({
+  name: "requests",
+  initialState: [],
+  reducers: {
+    addRequests: (state, action) => action.payload,
+
+    removeRequest: (state, action) => {
+      return state.filter((req) => req._id !== action.payload);
+    },
+    //better option
+  },
+});
+
+export const { addRequests, removeRequest } = requestSlice.actions;
+export default requestSlice.reducer;

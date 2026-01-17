@@ -6,19 +6,23 @@ const UserCard = ({ user }) => {
     lastName,
     gender,
     age,
+    // Support both casing styles from backend/frontend
     photoUrl,
+    photoURL,
     about,
     interests = [],
     location,
     verified,
   } = user;
 
+  const imgSrc = photoUrl || photoURL || "/default-avatar.png";
+
   return (
     <div className="card card-side bg-base-100 shadow-md w-full max-w-xl">
       {/* Profile Image */}
       <figure className="w-1/3">
         <img
-          src={photoUrl}
+          src={imgSrc}
           alt={`${firstName}'s profile`}
           className="h-full w-full object-cover"
         />

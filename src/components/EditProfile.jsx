@@ -8,7 +8,9 @@ import { addUser } from "../utils/userSlice";
 const EditProfile = ({ user }) => {
   const [firstName, setFirstname] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
-  const [photoURL, setPhotoURL] = useState(user.photoURL);
+  const [photoURL, setPhotoURL] = useState(
+    user.photoUrl || user.photoURL || ""
+  );
   const [age, setAge] = useState(user.age || "");
   const [gender, setGender] = useState(user.gender);
   const [about, setAbout] = useState(user.about);
@@ -173,135 +175,140 @@ const EditProfile = ({ user }) => {
     //     </div>
     //   )}
     // </>
-<>
-  <div className="min-h-screen flex justify-center items-start mt-10 px-4">
-    <div className="flex flex-col lg:flex-row gap-10 w-full max-w-6xl">
-      
-      {/* Edit Profile Card */}
-      <div className="w-full max-w-md mx-auto">
-        <div className="card bg-base-300 shadow-xl">
-          <div className="card-body">
-            <h2 className="card-title justify-center mb-2">
-              Edit Profile
-            </h2>
+    <>
+      <div className="min-h-screen flex justify-center items-start mt-10 px-4">
+        <div className="flex flex-col lg:flex-row gap-10 w-full max-w-6xl">
+          {/* Edit Profile Card */}
+          <div className="w-full max-w-md mx-auto">
+            <div className="card bg-base-300 shadow-xl">
+              <div className="card-body">
+                <h2 className="card-title justify-center mb-2">Edit Profile</h2>
 
-            <div className="space-y-2">
-              {/* First Name */}
-              <label className="form-control w-full">
-                <span className="label-text">First Name</span>
-                <input
-                  type="text"
-                  value={firstName}
-                  onChange={(e) => setFirstname(e.target.value)}
-                  className="input input-bordered w-full"
-                />
-              </label>
+                <div className="space-y-2">
+                  {/* First Name */}
+                  <label className="form-control w-full">
+                    <span className="label-text">First Name</span>
+                    <input
+                      type="text"
+                      value={firstName}
+                      onChange={(e) => setFirstname(e.target.value)}
+                      className="input input-bordered w-full"
+                    />
+                  </label>
 
-              {/* Last Name */}
-              <label className="form-control w-full">
-                <span className="label-text">Last Name</span>
-                <input
-                  type="text"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  className="input input-bordered w-full"
-                />
-              </label>
+                  {/* Last Name */}
+                  <label className="form-control w-full">
+                    <span className="label-text">Last Name</span>
+                    <input
+                      type="text"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      className="input input-bordered w-full"
+                    />
+                  </label>
 
-              {/* Age */}
-              <label className="form-control w-full">
-                <span className="label-text">Age</span>
-                <input
-                  type="number"
-                  value={age}
-                  onChange={(e) => setAge(Number(e.target.value))}
-                  className="input input-bordered w-full"
-                />
-              </label>
+                  {/* Age */}
+                  <label className="form-control w-full">
+                    <span className="label-text">Age</span>
+                    <input
+                      type="number"
+                      value={age}
+                      onChange={(e) => setAge(Number(e.target.value))}
+                      className="input input-bordered w-full"
+                    />
+                  </label>
 
-              {/* Photo URL */}
-              <label className="form-control w-full">
-                <span className="label-text">Photo URL</span>
-                <input
-                  type="text"
-                  value={photoURL}
-                  onChange={(e) => setPhotoURL(e.target.value)}
-                  className="input input-bordered w-full"
-                />
-              </label>
+                  {/* Photo URL */}
+                  <label className="form-control w-full">
+                    <span className="label-text">Photo URL</span>
+                    <input
+                      type="text"
+                      value={photoURL}
+                      onChange={(e) => setPhotoURL(e.target.value)}
+                      className="input input-bordered w-full"
+                    />
+                  </label>
 
-              {/* Gender */}
-              <label className="form-control w-full">
-                <span className="label-text">Gender</span>
-                <select
-                  value={gender || ""}
-                  onChange={(e) => setGender(e.target.value)}
-                  className="select select-bordered w-full"
-                >
-                  <option value="" disabled>Select gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Others">Others</option>
-                </select>
-              </label>
+                  {/* Gender */}
+                  <label className="form-control w-full">
+                    <span className="label-text">Gender</span>
+                    <select
+                      value={gender || ""}
+                      onChange={(e) => setGender(e.target.value)}
+                      className="select select-bordered w-full"
+                    >
+                      <option value="" disabled>
+                        Select gender
+                      </option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Others">Others</option>
+                    </select>
+                  </label>
 
-              {/* Skills */}
-              <label className="form-control w-full">
-                <span className="label-text">Skills (comma separated)</span>
-                <input
-                  type="text"
-                  value={skills.join(",")}
-                  onChange={(e) => setSkills(e.target.value.split(","))}
-                  className="input input-bordered w-full"
-                />
-              </label>
+                  {/* Skills */}
+                  <label className="form-control w-full">
+                    <span className="label-text">Skills (comma separated)</span>
+                    <input
+                      type="text"
+                      value={skills.join(",")}
+                      onChange={(e) => setSkills(e.target.value.split(","))}
+                      className="input input-bordered w-full"
+                    />
+                  </label>
 
-              {/* About */}
-              <label className="form-control w-full">
-                <span className="label-text">About</span>
-                <textarea
-                  value={about}
-                  onChange={(e) => setAbout(e.target.value)}
-                  className="textarea textarea-bordered w-full"
-                />
-              </label>
+                  {/* About */}
+                  <label className="form-control w-full">
+                    <span className="label-text">About</span>
+                    <textarea
+                      value={about}
+                      onChange={(e) => setAbout(e.target.value)}
+                      className="textarea textarea-bordered w-full"
+                    />
+                  </label>
+                </div>
+
+                {error && (
+                  <p className="text-red-500 text-center mt-2">{error}</p>
+                )}
+
+                <div className="card-actions justify-center mt-4">
+                  <button
+                    className="btn btn-primary w-full"
+                    onClick={saveProfile}
+                  >
+                    Save Profile
+                  </button>
+                </div>
+              </div>
             </div>
+          </div>
 
-            {error && (
-              <p className="text-red-500 text-center mt-2">
-                {error}
-              </p>
-            )}
-
-            <div className="card-actions justify-center mt-4">
-              <button className="btn btn-primary w-full" onClick={saveProfile}>
-                Save Profile
-              </button>
-            </div>
+          {/* Preview Card */}
+          <div className="w-full max-w-md mx-auto">
+            <UserCard
+              user={{
+                firstName,
+                lastName,
+                photoURL,
+                about,
+                age,
+                gender,
+                skills,
+              }}
+            />
           </div>
         </div>
       </div>
 
-      {/* Preview Card */}
-      <div className="w-full max-w-md mx-auto">
-        <UserCard
-          user={{ firstName, lastName, photoURL, about, age, gender, skills }}
-        />
-      </div>
-
-    </div>
-  </div>
-
-  {showToast && (
-    <div className="toast toast-top toast-center">
-      <div className="alert alert-success">
-        <span>Profile saved successfully</span>
-      </div>
-    </div>
-  )}
-</>
-
-
+      {showToast && (
+        <div className="toast toast-top toast-center">
+          <div className="alert alert-success">
+            <span>Profile saved successfully</span>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

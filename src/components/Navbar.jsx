@@ -154,7 +154,7 @@ const NavBar = () => {
             {/* Profile Image */}
             <div className="w-10 h-10 rounded-full overflow-hidden">
               <img
-                src={user?.photoUrl || "/default-avatar.png"}
+                src={user?.photoUrl || user?.photoURL || "/default-avatar.png"}
                 alt="Profile"
                 className="w-full h-full object-cover"
               />

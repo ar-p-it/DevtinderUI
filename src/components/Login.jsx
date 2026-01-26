@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { addUser } from "../utils/userSlice";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 const Login = () => {
   const [emailId, setEmailId] = useState("");
@@ -49,7 +49,7 @@ const Login = () => {
         },
         {
           withCredentials: true,
-        }
+        },
       );
 
       // ❌ OLD
@@ -57,7 +57,6 @@ const Login = () => {
 
       // ✅ NEW (backend sends structured data)
       dispatch(addUser(response.data.user));
-
       navigate("/");
     } catch (error) {
       // ❌ OLD
@@ -208,12 +207,12 @@ const Login = () => {
           <div className="mt-8 text-center">
             <p className="text-sm text-gray-600">
               Don't have an account?{" "}
-              <a
-                href="#"
+              <Link
+                to="/signup"
                 className="text-purple-600 hover:text-purple-700 font-semibold"
               >
                 Sign up for free
-              </a>
+              </Link>
             </p>
           </div>
         </div>

@@ -1,7 +1,13 @@
+import axios from "axios";
+import { BASE_URL } from "../utils/constants";
+import { useDispatch } from "react-redux";
+import { removeUserfromFeed } from "../utils/feedSlice";
 const UserCard = ({ user }) => {
+  const dispatch = useDispatch();
   if (!user) return null;
 
   const {
+    _id,
     firstName,
     lastName,
     gender,
@@ -14,7 +20,18 @@ const UserCard = ({ user }) => {
     location,
     verified,
   } = user;
-
+  const handleSendRequest = async (status, userId) => {
+    try {
+      await axios.post(
+        BASE_URL + "/request/send/" + status + "/" + userId,
+        {},
+        { withCredentials: true },
+      );
+      dispatch(removeUserfromFeed(userId));
+    } catch (error) {
+      console.log("e:" + error);
+    }
+  };
   const imgSrc = photoUrl || photoURL || "/default-avatar.png";
 
   return (
@@ -55,8 +72,18 @@ const UserCard = ({ user }) => {
 
         {/* Actions */}
         <div className="card-actions justify-end mt-4">
-          <button className="btn btn-outline btn-error">❌</button>
-          <button className="btn btn-outline btn-success">❤️</button>
+          <button
+            className="btn btn-outline btn-error"
+            onClick={() => handleSendRequest("ignored", _id)}
+          >
+            ❌
+          </button>
+          <button
+            className="btn btn-outline btn-success"
+            onClick={() => handleSendRequest("interested", _id)}
+          >
+            ❤️
+          </button>
         </div>
       </div>
     </div>

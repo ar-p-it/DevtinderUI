@@ -126,7 +126,7 @@ const reviewRequests = async (status, _id) => {
                       transition
                     "
                     onClick={() => {
-                      console.log(requests);
+                      // console.log(requests);
 
                       reviewRequests("accepted", req._id);
                     }}

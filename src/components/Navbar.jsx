@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import { removeUser } from "../utils/userSlice";
+import defaultImg from "../components/default-img.jpg"; 
 
 const NavBar = () => {
   const user = useSelector((store) => store.user);
@@ -152,13 +153,14 @@ const NavBar = () => {
             rounded-full px-2"
           >
             {/* Profile Image */}
-            <div className="w-10 h-10 rounded-full overflow-hidden">
-              <img
-                src={user?.photoUrl || user?.photoURL || "/default-avatar.png"}
-                alt="Profile"
-                className="w-full h-full object-cover"
-              />
-            </div>
+<div className="w-10 h-10 rounded-full overflow-hidden">
+  <img
+    src={user?.photoUrl || user?.photoURL || defaultImg}
+    onError={(e) => (e.currentTarget.src = defaultImg)}
+    alt="Profile"
+    className="w-full h-full object-cover"
+  />
+</div>
 
             {/* Welcome text */}
             {user && (

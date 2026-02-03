@@ -106,6 +106,8 @@ import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { createSocketConnection } from "../utils/socket";
 import { useSelector } from "react-redux";
+import { BASE_URL } from "../utils/constants";
+import axios from "axios";
 
 const Chat = () => {
   const { toUserId } = useParams();
@@ -115,6 +117,26 @@ const Chat = () => {
 
   const user = useSelector((store) => store.user);
   const userId = user?._id;
+
+  const fetchChatMessages = async () => {
+    try {
+      const chat = await axios.get(BASE_URL + "/chat/" + toUserId, {
+        withCredentials: true,
+      });
+
+      // console.log(chat.data.messages);
+
+      if (chat?.data?.messages && chat.data.messages.length > 0) {
+        setMessages(chat.data.messages);
+      }
+    } catch (error) {
+      console.error("Error fetching chat messages:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchChatMessages();
+  }, []);
 
   useEffect(() => {
     if (!userId) return;
@@ -135,6 +157,18 @@ const Chat = () => {
 
   const sendMessage = () => {
     if (!newMessage.trim()) return;
+
+    // Add message to state immediately for UI feedback
+    const newMsg = {
+      senderId: {
+        _id: userId,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      },
+      text: newMessage,
+    };
+
+    setMessages((prev) => [...prev, newMsg]);
 
     socketRef.current.emit("sendMessage", {
       firstName: user.firstName,
@@ -159,29 +193,42 @@ const Chat = () => {
         <div className="grid grid-rows-[1fr_auto] rounded-3xl bg-white shadow overflow-hidden">
           {/* Messages */}
           <div className="p-6 space-y-4 h-[60vh] overflow-y-auto">
-            {messages.map((msg, index) => (
-              <div
-                key={index}
-                className={`flex ${
-                  msg.firstName === user.firstName
-                    ? "justify-end"
-                    : "justify-start"
-                }`}
-              >
-                <div className="max-w-[70%]">
-                  <div className="text-xs text-gray-400">{msg.firstName}</div>
-                  <div
-                    className={`mt-1 px-4 py-3 rounded-2xl ${
-                      msg.firstName === user.firstName
-                        ? "bg-violet-500 text-white"
-                        : "bg-violet-100 text-gray-800"
-                    }`}
-                  >
-                    {msg.text}
-                  </div>
+            {messages.length === 0 ? (
+              <div className="flex items-center justify-center h-full">
+                <div className="text-center text-gray-400">
+                  <p className="text-lg font-semibold">No messages yet</p>
+                  <p className="text-sm mt-2">
+                    Start a conversation by sending a message
+                  </p>
                 </div>
               </div>
-            ))}
+            ) : (
+              messages.map((msg, index) => (
+                <div
+                  key={index}
+                  className={`flex ${
+                    msg.senderId?._id === userId
+                      ? "justify-end"
+                      : "justify-start"
+                  }`}
+                >
+                  <div className="max-w-[70%]">
+                    <div className="text-xs text-gray-400">
+                      {msg.senderId?.firstName} {msg.senderId?.lastName}
+                    </div>
+                    <div
+                      className={`mt-1 px-4 py-3 rounded-2xl ${
+                        msg.senderId?._id === userId
+                          ? "bg-violet-500 text-white"
+                          : "bg-violet-200 text-violet-900"
+                      }`}
+                    >
+                      {msg.text}
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
 
           {/* Composer */}
